@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 import os
+from Punch_store import PunchArenaStore
 from player_profile import Profile
 from graphics_common import MyDialog
 
@@ -18,12 +19,16 @@ class PunchArenaMenu:
         self.player_profile()
 
         global images
-        cover = tk.PhotoImage(file="imgs/menucover.png")
+        cover = tk.PhotoImage(file="imgs/menu/menucover.png")
         images['cover'] = cover
 
         self.menu_canvas.create_image(0, 0, anchor="nw", image=cover)
         self.pop_buttons_save()
         self.active_profile = None
+
+        self.tk_shop = None
+        self.tk_armory = None
+        self.tk_arena = None
 
         self.pop_buttons_play()
 
@@ -297,6 +302,8 @@ class PunchArenaMenu:
                 "Load a player or start a new\ngame to use the shop."
             )
             return
+        if self.tk_shop is None:
+            self.tk_shop = PunchArenaStore(self)
 
     def options(self):
         pass
