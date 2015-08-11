@@ -6,6 +6,7 @@ and players are loaded into the arena based on their profiles
 
 """
 from operator import add
+import ast
 
 
 class Profile:
@@ -79,3 +80,50 @@ class Profile:
             return False
         self.equipped_abilties[slot] = move
         return True
+
+    def save_player(self):
+        filename = "save/%s.txt" % self.name
+        f = open(filename, 'w')
+
+        print(self.name, file=f)
+        print(str(self.max_hp), file=f)
+        print(str(self.max_mp), file=f)
+        print(str(self.max_move), file=f)
+        print(str(self.base_damage), file=f)
+        print(str(self.blood_in), file=f)
+        print(str(self.blood_out), file=f)
+
+        print(str(self.punch_dollars), file=f)
+        print(str(self.net_worth), file=f)
+        print(str(self.effective_net_worth), file=f)
+        print(str(self.color_credits), file=f)
+
+        # options
+        print(str(self.text_speed), file=f)
+        print(str(self.battle_speed), file=f)
+
+        print(str(self.equipped_abilties), file=f)
+        print(str(self.abilities), file=f)
+
+    def load_player(self, name):
+        filename = "save/%s.txt" % name
+        with open(filename, "r") as ins:
+            array = []
+            for line in ins:
+                array.append(line)
+        self.name = array[0].rstrip()
+        self.max_hp = int(array[1])
+        self.max_mp = int(array[2])
+        self.max_move = int(array[3])
+        self.base_damage = int(array[4])
+        self.blood_in = int(array[5])
+        self.blood_out = int(array[6])
+
+        self.punch_dollars = int(array[7])
+        self.net_worth = int(array[8])
+        self.effective_net_worth = int(array[9])
+
+        self.color_credits = ast.literal_eval(array[10])
+
+        self.equipped_abilties = ast.literal_eval(array[13])
+        self.abilities = ast.literal_eval(array[14])

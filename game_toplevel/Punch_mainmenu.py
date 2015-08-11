@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
-
+import os
 from player_profile import Profile
 from graphics_common import MyDialog
 
@@ -42,7 +42,7 @@ class PunchArenaMenu:
         self.bind_hover1(newgame_btn)
         self.menu_canvas.create_window(3, 505, low_window, window=newgame_btn)
 
-        loadgame_btn = tk.Button(tkRoot, low_options)
+        loadgame_btn = tk.Button(tkRoot, low_options, command=self.load_game)
         loadgame_btn.configure(text="Load Game")
         self.bind_hover1(loadgame_btn)
         self.menu_canvas.create_window(202, 505, low_window, window=loadgame_btn)
@@ -133,7 +133,7 @@ class PunchArenaMenu:
         canvas.itemconfig('p_name', state="normal")
         canvas.itemconfig('p_name', text=profile.name)
         # tally color credits and attempt to color the player the most appropriate color
-        cc = profile.tally_color_credits()
+        cc = profile.color_credits
         col = "white"
         if cc[0] == cc[1] == cc[2] == cc[3]:
             pass
@@ -170,7 +170,7 @@ class PunchArenaMenu:
 
         for x in range(8):
             move = profile.equipped_abilties[x]
-            if move is 'none':
+            if move == 'none':
                 canvas.itemconfig("p_%d" % x, image=images['error'])
             else:
                 images['icon_%d' % x] = tk.PhotoImage(file="imgs/statbar/%sbutton.gif" % move)
@@ -215,7 +215,7 @@ class PunchArenaMenu:
                 return
             elif a is True:
                 self.save_game()
-        a = MyDialog(self.tkRoot, "What if your fighter's name?", self, "create_player")
+        MyDialog(self.tkRoot, "What if your fighter's name?", self, "create_player")
 
     def create_player(self, name):
         if name == "":
@@ -224,10 +224,46 @@ class PunchArenaMenu:
         self.update_profile()
 
     def save_game(self):
-        pass
+        if self.active_profile is None:
+            messagebox.showwarning(
+                "No player loaded",
+                "Nothing to save!."
+            )
+            return
+        name = self.active_profile.name
+        if os.path.isfile("save/%s.txt" % name):
+            a = messagebox.askyesno(
+                "File already exists",
+                "Overwrite file?",
+            )
+            if a is False:
+                return
+        self.active_profile.save_player()
 
     def load_game(self):
-        pass
+        if self.active_profile is not None:
+            a = messagebox.askyesnocancel(
+                "Game is loaded",
+                "Do you wish to save your current game?",
+            )
+            if a is None:
+                return
+            elif a is True:
+                self.save_game()
+        MyDialog(self.tkRoot, "What if your fighter's name?", self, "recreate_player")
+
+    def recreate_player(self, name):
+        if not os.path.isfile("save/%s.txt" % name):
+            messagebox.showwarning(
+                "Invalid name",
+                "Couldn't find that player's save."
+            )
+            return
+
+        self.active_profile = Profile()
+        self.active_profile.load_player(name)
+        self.update_profile()
+
 
     def armory(self):
         if self.active_profile is None:
