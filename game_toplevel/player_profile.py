@@ -7,6 +7,7 @@ and players are loaded into the arena based on their profiles
 """
 from operator import add
 
+
 class Profile:
     def __init__(self, name="Aria"):
         self.name = name
@@ -22,10 +23,10 @@ class Profile:
         # moves
         self.abilities = dict()
         self.abilities['none'] = 0
-        self.abilities['walk']= 1
+        self.abilities['walk'] = 1
         self.abilities['punch'] = 1
         self.abilities['block'] = 1
-        self.abilities['grab'] =1
+        self.abilities['grab'] = 1
         self.abilities['throw'] = 1
 
         self.equipped_abilties = ['walk', 'punch', 'block', 'grab',
@@ -53,28 +54,28 @@ class Profile:
 
         player.abilities = self.equipped_abilties
 
-    def punchdollar_dx(self,amount):
+    def punchdollar_dx(self, amount):
         self.punch_dollars += amount
 
     def tally_color_credits(self):
-        total_color_credits = [0,0,0,0]
+        total_color_credits = [0, 0, 0, 0]
         for move in self.abilities.keys():
-            #get the cumulative cc for a given move
-            #move_credits = move.get_cum_cc(move)
-            map(add,total_color_credits, move)
+            # get the cumulative cc for a given move
+            # move_credits = move.get_cum_cc(move)
+            map(add, total_color_credits, move)
 
         self.color_credits = total_color_credits
         return total_color_credits
 
-    def equip_ability(self,move,slot):
+    def equip_ability(self, move, slot):
         if slot == 0:
-            #cannot overwrite walk slot
+            # cannot overwrite walk slot
             return False
         if move not in self.abilities:
-            #cannot equip unowned moves
+            # cannot equip unowned moves
             return False
         if move in self.equipped_abilties:
-            #cannot equip moves twice
+            # cannot equip moves twice
             return False
         self.equipped_abilties[slot] = move
         return True

@@ -9,6 +9,7 @@ class MyDialog:
 
     based on some effbot tutorials
     """
+
     def __init__(self, tkRoot, query="", targetObj=None, targetMethod=None):
         top = self.top = tk.Toplevel(tkRoot)
         top.wm_title("Query")
@@ -29,4 +30,3 @@ class MyDialog:
     def ok(self):
         getattr(self.targetObj, self.targetMethod, None)(self.entry.get())
         self.top.destroy()
-

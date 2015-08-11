@@ -10,7 +10,7 @@ if __name__ == "__main__":
     tkRoot.resizable(0, 0)
     tkRoot.wm_title("Punch Arena v. 0.2.1")
     cwd = os.getcwd()
-    tkRoot.iconbitmap(cwd+'/imgs/punch.ico')
+    tkRoot.iconbitmap(cwd + '/imgs/punch.ico')
 
     menu = PunchArenaMenu(tkRoot)
 

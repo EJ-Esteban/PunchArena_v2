@@ -88,13 +88,13 @@ class PunchArenaMenu:
         canvas.create_text(533, 147, rightcol, fill='goldenrod', tag='p_dmg')
         canvas.create_text(533, 162, rightcol, fill='dark red', tag='p_bl')
 
-        #player net worth stats
-        canvas.create_text(530, 181, leftcol, text = "Punch Dollars:")
-        canvas.create_text(530, 196, leftcol, text = "Eff. Net Worth:")
-        canvas.create_text(530, 211, leftcol, text = "Red CC:")
-        canvas.create_text(530, 226, leftcol, text = "Blue CC:")
-        canvas.create_text(530, 241, leftcol, text = "Green CC:")
-        canvas.create_text(530, 256, leftcol, text = "Yellow CC:")
+        # player net worth stats
+        canvas.create_text(530, 181, leftcol, text="Punch Dollars:")
+        canvas.create_text(530, 196, leftcol, text="Eff. Net Worth:")
+        canvas.create_text(530, 211, leftcol, text="Red CC:")
+        canvas.create_text(530, 226, leftcol, text="Blue CC:")
+        canvas.create_text(530, 241, leftcol, text="Green CC:")
+        canvas.create_text(530, 256, leftcol, text="Yellow CC:")
 
         canvas.create_text(533, 181, rightcol, fill='black', tag='p_pdollars')
         canvas.create_text(533, 196, rightcol, fill='black', tag='p_networth')
@@ -103,19 +103,19 @@ class PunchArenaMenu:
         canvas.create_text(533, 241, rightcol, fill='green', tag='p_green')
         canvas.create_text(533, 256, rightcol, fill='goldenrod', tag='p_yellow')
 
-        #moves equipped
-        canvas.create_text(447, 276, {'font': "helvetica 12", 'anchor': 'w', 'fill': 'black', 'text' : "Equipped:"})
+        # moves equipped
+        canvas.create_text(447, 276, {'font': "helvetica 12", 'anchor': 'w', 'fill': 'black', 'text': "Equipped:"})
 
         images['button cover'] = tk.PhotoImage(file="imgs/statbar/buttoncover.gif")
         images['error'] = tk.PhotoImage(file="imgs/statbar/errorblock.gif")
 
-        for x in [0,1,2,3]:
-            canvas.create_image(460, 287 + x*53, anchor="nw", image=images['error'], tag="p_"+str(x*2))
-            canvas.create_image(460, 287 + x*53, anchor="nw", image=images['button cover'])
+        for x in [0, 1, 2, 3]:
+            canvas.create_image(460, 287 + x * 53, anchor="nw", image=images['error'], tag="p_" + str(x * 2))
+            canvas.create_image(460, 287 + x * 53, anchor="nw", image=images['button cover'])
 
-        for x in [0,1,2,3]:
-            canvas.create_image(528, 287 + x*53, anchor="nw", image=images['error'], tag="p_"+str(x*2 + 1))
-            canvas.create_image(528, 287 + x*53, anchor="nw", image=images['button cover'])
+        for x in [0, 1, 2, 3]:
+            canvas.create_image(528, 287 + x * 53, anchor="nw", image=images['error'], tag="p_" + str(x * 2 + 1))
+            canvas.create_image(528, 287 + x * 53, anchor="nw", image=images['button cover'])
 
     def update_profile(self):
         profile = self.active_profile
@@ -163,12 +163,10 @@ class PunchArenaMenu:
         for x in range(8):
             move = profile.equipped_abilties[x]
             if move is 'none':
-                canvas.itemconfig("p_%d" %x, image = images['error'])
+                canvas.itemconfig("p_%d" % x, image=images['error'])
             else:
-                images['icon_%d' %x ] = tk.PhotoImage(file = "imgs/statbar/%sbutton.gif" % move)
-                canvas.itemconfig("p_%d" %x, image = images['icon_%d' %x ])
-
-
+                images['icon_%d' % x] = tk.PhotoImage(file="imgs/statbar/%sbutton.gif" % move)
+                canvas.itemconfig("p_%d" % x, image=images['icon_%d' % x])
 
     def new_game(self):
         if self.active_profile is not None:
