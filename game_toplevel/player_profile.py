@@ -8,7 +8,7 @@ and players are loaded into the arena based on their profiles
 from operator import add
 
 class Profile:
-    def __init__(self, name="Skip"):
+    def __init__(self, name="Aria"):
         self.name = name
 
         # basic, unskilled stats
@@ -60,10 +60,11 @@ class Profile:
         total_color_credits = [0,0,0,0]
         for move in self.abilities.keys():
             #get the cumulative cc for a given move
-            move_credits = move.get_cum_cc(self.abilities[move])
+            #move_credits = move.get_cum_cc(move)
             map(add,total_color_credits, move)
 
         self.color_credits = total_color_credits
+        return total_color_credits
 
     def equip_ability(self,move,slot):
         if slot == 0:
