@@ -151,7 +151,7 @@ class PunchArenaMenu:
 
         # tiny avatar thing
         global images
-        i = tk.PhotoImage(file="imgs/sprites/bobN.gif")
+        i = tk.PhotoImage(file="imgs/sprites/%sS.gif" % self.active_profile.sprite)
         images['sprite_fg'] = i
         canvas.itemconfig("player_sprite", image=i)
 
@@ -180,7 +180,12 @@ class PunchArenaMenu:
         tkRoot = self.tkRoot
         canvas = self.menu_canvas
 
-        canvas.create_text(230, 60, anchor='n', text="PUNCH ARENA", font='impact 40')
+        global images
+        images['diamond'] = tk.PhotoImage(file="imgs/diamondfilled.png")
+
+        canvas.create_image(20, 30, anchor='nw', image=images['diamond'])
+
+        canvas.create_text(100, 30, anchor='nw', text="PUNCH ARENA", font='impact 40')
         play_options = {'bg': "light slate gray", 'anchor': 'center', 'font': "Helvetica 30",
                         'width': 10, 'activebackground': "gray", 'relief': 'raised'}
         play_window = {"height": 70, "width": 418, "anchor": 'nw'}
@@ -231,6 +236,7 @@ class PunchArenaMenu:
             )
             return
         name = self.active_profile.name
+        name = name.replace(' ', '_')
         if os.path.isfile("save/%s.txt" % name):
             a = messagebox.askyesno(
                 "File already exists",
@@ -253,6 +259,9 @@ class PunchArenaMenu:
         MyDialog(self.tkRoot, "What if your fighter's name?", self, "recreate_player")
 
     def recreate_player(self, name):
+        if name == "":
+            name = "aria"
+        name = name.replace(' ', '_')
         if not os.path.isfile("save/%s.txt" % name):
             messagebox.showwarning(
                 "Invalid name",

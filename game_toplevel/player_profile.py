@@ -11,7 +11,11 @@ import ast
 
 class Profile:
     def __init__(self, name="Aria"):
-        self.name = name
+        name = name.replace('_', ' ')
+        s = ""
+        for x in name.split():
+            s += x.capitalize() + " "
+        self.name = s[:-1]
 
         # basic, unskilled stats
         self.max_hp = 10
@@ -40,6 +44,8 @@ class Profile:
         self.color_credits = [0, 0, 0, 0]
 
         # options
+        self.sprite = 'bob'
+        self.purchased_sprites = ['bob']
         self.text_speed = 'normal'
         self.battle_speed = 'normal'
 
@@ -82,7 +88,9 @@ class Profile:
         return True
 
     def save_player(self):
-        filename = "save/%s.txt" % self.name
+        name = self.name.replace(' ', '_')
+
+        filename = "save/%s.txt" % name
         f = open(filename, 'w')
 
         print(self.name, file=f)
@@ -98,14 +106,21 @@ class Profile:
         print(str(self.effective_net_worth), file=f)
         print(str(self.color_credits), file=f)
 
-        # options
-        print(str(self.text_speed), file=f)
-        print(str(self.battle_speed), file=f)
-
         print(str(self.equipped_abilties), file=f)
         print(str(self.abilities), file=f)
 
+        # options
+        print(str(self.sprite), file=f)
+        print(str(self.purchased_sprites))
+        print(str(self.text_speed), file=f)
+        print(str(self.battle_speed), file=f)
+
     def load_player(self, name):
+        name = name.replace(' ', '_')
+        s = ""
+        for x in name.split():
+            s += x.capitalize() + " "
+        name = s[:-1]
         filename = "save/%s.txt" % name
         with open(filename, "r") as ins:
             array = []
@@ -122,8 +137,10 @@ class Profile:
         self.punch_dollars = int(array[7])
         self.net_worth = int(array[8])
         self.effective_net_worth = int(array[9])
-
         self.color_credits = ast.literal_eval(array[10])
 
-        self.equipped_abilties = ast.literal_eval(array[13])
-        self.abilities = ast.literal_eval(array[14])
+        self.equipped_abilties = ast.literal_eval(array[11])
+        self.abilities = ast.literal_eval(array[12])
+
+        self.sprite = array[13].rstrip()
+        self.purchased_sprites = ast.literal_eval(array[14])
