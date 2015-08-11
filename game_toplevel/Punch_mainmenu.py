@@ -22,10 +22,12 @@ class PunchArenaMenu:
         images['cover'] = cover
 
         self.menu_canvas.create_image(0, 0, anchor="nw", image=cover)
-        self.pop_buttons()
+        self.pop_buttons_save()
         self.active_profile = None
 
-    def pop_buttons(self):
+        self.pop_buttons_play()
+
+    def pop_buttons_save(self):
         """populates menu buttons"""
 
         tkRoot = self.tkRoot
@@ -37,31 +39,37 @@ class PunchArenaMenu:
 
         newgame_btn = tk.Button(tkRoot, low_options, command=self.new_game)
         newgame_btn.configure(text="New Game")
-        self.bind_hover(newgame_btn)
+        self.bind_hover1(newgame_btn)
         self.menu_canvas.create_window(3, 505, low_window, window=newgame_btn)
 
         loadgame_btn = tk.Button(tkRoot, low_options)
         loadgame_btn.configure(text="Load Game")
-        self.bind_hover(loadgame_btn)
+        self.bind_hover1(loadgame_btn)
         self.menu_canvas.create_window(202, 505, low_window, window=loadgame_btn)
 
         savegame_btn = tk.Button(tkRoot, low_options, command=self.save_game)
         savegame_btn.configure(text="Save Game")
-        self.bind_hover(savegame_btn)
+        self.bind_hover1(savegame_btn)
         self.menu_canvas.create_window(401, 505, low_window, window=savegame_btn)
 
-    def bind_hover(self, button):
+    def bind_hover1(self, button):
         button.bind("<Enter>", lambda event, h=button: h.configure(bg="light gray"))
         button.bind("<Leave>", lambda event, h=button: h.configure(bg="gray"))
+
+    def bind_hover2(self, button):
+        button.bind("<Enter>", lambda event, h=button: h.configure(bg="white"))
+        button.bind("<Leave>", lambda event, h=button: h.configure(bg="light slate gray"))
 
     def player_profile(self):
         """loads right bar, showign current player"""
 
         canvas = self.menu_canvas
-        canvas.create_rectangle(440, 0, 600, 172, fill="white", width=2, tag='p_color')
+        canvas.create_rectangle(0, 0, 440, 550, fill="slate gray", width=2)
+
+        canvas.create_rectangle(440, 0, 600, 172, fill="dark gray", width=2)
         canvas.create_rectangle(440, 172, 600, 267, fill="light gray", width=2)
-        canvas.create_rectangle(440, 267, 600, 550, fill="white", width=2)
-        canvas.create_rectangle(440, 0, 600, 34, fill="white", width=2)
+        canvas.create_rectangle(440, 267, 600, 550, fill="dark gray", width=2)
+        canvas.create_rectangle(440, 0, 600, 34, fill="white", width=2, tag='p_color')
         # player name
         canvas.create_text(518, 8, text="Player", font="helvetica 14 italic",
                            fill='black', disabledfill='gray', tag='p_name',
@@ -79,7 +87,7 @@ class PunchArenaMenu:
         canvas.create_text(530, 117, leftcol, text="Max MP:")
         canvas.create_text(530, 132, leftcol, text="Max Move:")
         canvas.create_text(530, 147, leftcol, text="Base Dmg:")
-        canvas.create_text(529, 162, leftcol, text="Bloodlust:")
+        canvas.create_text(530, 162, leftcol, text="Bloodlust:")
 
         rightcol = {'font': "helvetica 10", 'anchor': 'w', 'disabledfill': 'gray', 'state': 'disabled', 'text': '--'}
         canvas.create_text(533, 102, rightcol, fill='red', tag='p_hp')
@@ -104,7 +112,7 @@ class PunchArenaMenu:
         canvas.create_text(533, 256, rightcol, fill='goldenrod', tag='p_yellow')
 
         # moves equipped
-        canvas.create_text(447, 276, {'font': "helvetica 12", 'anchor': 'w', 'fill': 'black', 'text': "Equipped:"})
+        canvas.create_text(447, 277, {'font': "helvetica 12", 'anchor': 'w', 'fill': 'black', 'text': "Equipped:"})
 
         images['button cover'] = tk.PhotoImage(file="imgs/statbar/buttoncover.gif")
         images['error'] = tk.PhotoImage(file="imgs/statbar/errorblock.gif")
@@ -168,6 +176,35 @@ class PunchArenaMenu:
                 images['icon_%d' % x] = tk.PhotoImage(file="imgs/statbar/%sbutton.gif" % move)
                 canvas.itemconfig("p_%d" % x, image=images['icon_%d' % x])
 
+    def pop_buttons_play(self):
+        tkRoot = self.tkRoot
+        canvas = self.menu_canvas
+
+        canvas.create_text(230, 60, anchor='n', text="PUNCH ARENA", font='impact 40')
+        play_options = {'bg': "light slate gray", 'anchor': 'center', 'font': "Helvetica 30",
+                        'width': 10, 'activebackground': "gray", 'relief': 'raised'}
+        play_window = {"height": 70, "width": 418, "anchor": 'nw'}
+
+        arena_btn = tk.Button(tkRoot, play_options, command=self.arena_fight)
+        arena_btn.configure(text="Arena")
+        self.bind_hover2(arena_btn)
+        self.menu_canvas.create_window(12, 125, play_window, window=arena_btn)
+
+        armory_btn = tk.Button(tkRoot, play_options, command=self.armory)
+        armory_btn.configure(text="Armory")
+        self.bind_hover2(armory_btn)
+        self.menu_canvas.create_window(12, 200, play_window, window=armory_btn)
+
+        shop_btn = tk.Button(tkRoot, play_options, command=self.shop)
+        shop_btn.configure(text="Shop")
+        self.bind_hover2(shop_btn)
+        self.menu_canvas.create_window(12, 275, play_window, window=shop_btn)
+
+        options_btn = tk.Button(tkRoot, play_options, command=self.options)
+        options_btn.configure(text="Options")
+        self.bind_hover2(options_btn)
+        self.menu_canvas.create_window(12, 350, play_window, window=options_btn)
+
     def new_game(self):
         if self.active_profile is not None:
             a = messagebox.askyesnocancel(
@@ -187,4 +224,34 @@ class PunchArenaMenu:
         self.update_profile()
 
     def save_game(self):
+        pass
+
+    def load_game(self):
+        pass
+
+    def armory(self):
+        if self.active_profile is None:
+            messagebox.showwarning(
+                "No player loaded",
+                "Load a player or start a new\ngame to use the armory."
+            )
+            return
+
+    def arena_fight(self):
+        if self.active_profile is None:
+            messagebox.showwarning(
+                "No player loaded",
+                "Load a player or start a new\ngame to fight in the arena."
+            )
+            return
+
+    def shop(self):
+        if self.active_profile is None:
+            messagebox.showwarning(
+                "No player loaded",
+                "Load a player or start a new\ngame to use the shop."
+            )
+            return
+
+    def options(self):
         pass

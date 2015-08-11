@@ -1,7 +1,6 @@
 import tkinter as tk
 import os
 
-
 class MyDialog:
     """
     creates a popup box that will ask for a text input. On enter/okay,
