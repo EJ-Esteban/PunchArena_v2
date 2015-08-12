@@ -1,13 +1,14 @@
 import tkinter as tk
 import math
-from player_profile import Profile
+
+import moves
 
 # need a top level reference to images to prevent garbage collection
 images = dict()
 
 # storing these constants up here for convenience
 d_offset = [47, 300]
-d_segment = 18
+d_segment = float(75 / 4)
 d_center = 37
 
 d_red = [0, 0, 1, -1, 0, -2, -1, -1]
@@ -31,6 +32,7 @@ class PunchArenaStore:
         self.pop_buttons_save()
         self.pop_info()
         self.pop_profile()
+        self.pop_moves()
         self.update_profile()
 
     def make_drawing_area(self):
@@ -125,15 +127,15 @@ class PunchArenaStore:
         canvas.create_image(100, 0, image=images['info_under'], anchor='nw')
         canvas.create_image(100, 0, image=images['info_over'], anchor='nw', tag='info_icon')
 
-        self.info = tk.Text(self.shop_frame, bg="gray", font="helvetica 10", wrap="word", foreground="white",
-                            bd=1)
-        canvas.create_window(150, 0, width=264, height=149, anchor='nw', window=self.info)
+        self.info = tk.Text(self.shop_frame, bg="dim gray", font="helvetica 10", wrap="word", foreground="white",
+                            bd=2)
+        canvas.create_window(150, 0, width=265, height=149, anchor='nw', window=self.info)
 
         scroll = tk.Scrollbar(self.shop_frame)
         self.info.configure(yscrollcommand=scroll.set, state="disabled")
         scroll.config(command=self.info.yview)
         scroll.grid(row=0, column=1, sticky="NSEW")
-        canvas.create_window(413, 0, width=18, height=149, anchor='nw', window=scroll)
+        canvas.create_window(414, 0, width=17, height=149, anchor='nw', window=scroll)
 
     def pop_profile(self):
         canvas = self.c_canvas[3]
@@ -159,7 +161,7 @@ class PunchArenaStore:
         canvas.create_text(93, 141, leftcol, text="Moves owned:")
         canvas.create_text(93, 156, leftcol, text="Upgrades:")
 
-        canvas.create_text(93, 175, leftcol, text="Trait:")
+        canvas.create_text(93, 175, leftcol, text="Primary Trait:")
         canvas.create_text(93, 190, leftcol, text="CC Total:")
         canvas.create_text(93, 205, leftcol, text="Red CC:")
         canvas.create_text(93, 220, leftcol, text="Blue CC:")
@@ -300,6 +302,26 @@ class PunchArenaStore:
 
         canvas.tag_raise("diamond")
 
+    def pop_moves(self):
+        frame = tk.Frame(self.moves_frame)
+        frame.grid(row=0, column=0)
+
+        self.moves_canvas = tk.Canvas(frame, bg="purple", height=337, width=414, scrollregion=(0, 0, 414, 500),
+                                      highlightthickness=0)
+        self.moves_canvas.pack()
+
+        canvas = self.moves_canvas
+
+        scroll = tk.Scrollbar(self.moves_frame)
+        self.moves_canvas.configure(yscrollcommand=scroll.set, state="disabled")
+        scroll.config(command=self.moves_canvas.yview)
+        scroll.grid(row=0, column=1, sticky='ns')
+
+        canvas.create_text(20, 450, text="asdgf")
+
+        thingy = getattr(moves, "speed")
+        self.info.config(state="normal")
+        self.info.insert(tk.END, str(thingy.cost_list))
 
 
     def show_menu(self):
