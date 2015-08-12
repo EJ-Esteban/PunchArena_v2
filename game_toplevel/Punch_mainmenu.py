@@ -236,6 +236,8 @@ class PunchArenaMenu:
             name = "Aria"
         self.active_profile = Profile(name)
         self.update_profile()
+        if self.tk_shop is not None:
+            self.tk_shop.redraw_player()
 
     def save_game(self):
         if self.active_profile is None:
@@ -282,6 +284,10 @@ class PunchArenaMenu:
         self.active_profile.load_player(name)
         self.update_profile()
 
+        if self.tk_shop is not None:
+            self.tk_shop.redraw_player()
+
+
 
     def armory(self):
         if self.active_profile is None:
@@ -315,6 +321,7 @@ class PunchArenaMenu:
         else:
             self.menu_frame.grid_forget()
             self.tk_shop.shop_frame.grid(row=0, column=0)
+            self.tk_shop.update_profile()
 
     def options(self):
         pass

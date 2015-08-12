@@ -111,7 +111,7 @@ class Profile:
 
         # options
         print(str(self.sprite), file=f)
-        print(str(self.purchased_sprites))
+        print(str(self.purchased_sprites), file=f)
         print(str(self.text_speed), file=f)
         print(str(self.battle_speed), file=f)
 

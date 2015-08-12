@@ -25,8 +25,6 @@ class PunchArenaStore:
         self.shop_frame = tk.Frame(tkRoot, bg='pink', width=600, height=550, highlightthickness=0)
         self.shop_frame.grid(row=0, column=0)
 
-        self.active_profile = main_menu.active_profile
-
         # self.shop_frame.tkraise()
 
         self.make_drawing_area()
@@ -214,6 +212,10 @@ class PunchArenaStore:
             coords[k] = list[k] * scale * d_segment + 37
         return coords
 
+    def redraw_player(self):
+        """redraw on reload"""
+        self.update_profile()
+
     def update_profile(self):
         canvas = self.c_canvas[3]
         profile = self.main_menu.active_profile
@@ -222,7 +224,7 @@ class PunchArenaStore:
         canvas.itemconfig('p_name', state="normal")
         canvas.itemconfig('p_name', text=profile.name)
         global images
-        i = tk.PhotoImage(file="imgs/sprites/%sS.gif" % self.active_profile.sprite)
+        i = tk.PhotoImage(file="imgs/sprites/%sS.gif" % profile.sprite)
         images['sprite_fg'] = i
         canvas.itemconfig("player_sprite", image=i)
 
@@ -243,6 +245,8 @@ class PunchArenaStore:
         col = "white"
         if cc[0] == cc[1] == cc[2] == cc[3]:
             canvas.itemconfig("p_trait", state='normal', text="neutral", fill="black")
+            if cc[0] == 0:
+                rscl = bscl = gscl = yscl = 0
         else:
             j = cc.index(max(cc))
             if j is 0:
