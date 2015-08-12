@@ -85,21 +85,45 @@ class PunchArenaStore:
         tkRoot = self.tkRoot
         canvas = self.info_canvas
 
-        btn_options = {'bg': "gray", 'anchor': 'center', 'font': "helvetica 16",
+        btn_options = {'bg': "gray", 'anchor': 'center', 'font': "impact 12",
                        'width': 10, 'activebackground': "gray", 'relief': 'raised'}
-        btn_window = {"width": 100, "anchor": 'nw'}
 
-        info_sign = tk.Button(tkRoot, btn_options, state='disabled')
-        info_sign.configure(text="Info > ", disabledforeground="black")
-        canvas.create_window(0, 0, btn_window, window=info_sign, height=49)
+        info_sign = tk.Button(tkRoot, btn_options, state='disabled', anchor="e")
+        info_sign.configure(text="Info:  ", disabledforeground="black", font="impact 22")
+        canvas.create_window(0, 0, width=100, anchor='nw', window=info_sign, height=50)
 
         menu_btn = tk.Button(tkRoot, btn_options, command=self.show_menu)
-        menu_btn.configure(text=" < Menu")
-        canvas.create_window(0, 49, btn_window, window=menu_btn, height=50)
+        menu_btn.configure(text="Menu")
+        self.bind_hover1(menu_btn)
+        canvas.create_window(0, 99, width=75, anchor='nw', window=menu_btn, height=50)
 
-        menu_btn = tk.Button(tkRoot, btn_options, command=self.show_armory)
-        menu_btn.configure(text=" < Armory")
-        canvas.create_window(0, 99, btn_window, window=menu_btn, height=50)
+        armory_btn = tk.Button(tkRoot, btn_options, command=self.show_armory)
+        armory_btn.configure(text="Armory")
+        self.bind_hover1(armory_btn)
+        canvas.create_window(75, 99, width=75, anchor='nw', window=armory_btn, height=50)
+
+        buy_btn = tk.Button(tkRoot, btn_options)
+        buy_btn.configure(text="Buy   ", font="impact 22", anchor="e")
+        self.bind_hover1(buy_btn)
+        canvas.create_window(0, 50, width=150, anchor='nw', window=buy_btn, height=49)
+
+        global images
+        images['info_under'] = tk.PhotoImage(file="imgs/statbar/errorblock.gif")
+        images['info_over'] = tk.PhotoImage(file="imgs/statbar/buttoncover.gif")
+
+        canvas.create_image(100, 0, image=images['info_under'], anchor='nw')
+        canvas.create_image(100, 0, image=images['info_over'], anchor='nw', tag='info_icon')
+
+        self.info = tk.Text(self.shop_frame, bg="gray", font="helvetica 10", wrap="word", foreground="white",
+                            bd=1)
+        canvas.create_window(150, 0, width=263, height=149, anchor='nw', window=self.info)
+
+        scroll = tk.Scrollbar(self.shop_frame)
+        self.info.configure(yscrollcommand=scroll.set, state="disabled")
+        scroll.config(command=self.info.yview)
+        scroll.grid(row=0, column=1, sticky="NSEW")
+
+        canvas.create_window(412, 0, width=18, height=149, anchor='nw', window=scroll)
 
     def show_menu(self):
         self.shop_frame.grid_forget()
