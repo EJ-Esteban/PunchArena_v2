@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 import os
 from Punch_store import PunchArenaStore
+from Punch_armory import PunchArenaArmory
 from player_profile import Profile
 from graphics_common import MyDialog
 
@@ -13,7 +14,10 @@ class PunchArenaMenu:
     def __init__(self, tkRoot):
         self.tkRoot = tkRoot
 
-        self.menu_canvas = tk.Canvas(tkRoot, bg='gray', width=600, height=550, highlightthickness=0)
+        self.menu_frame = tk.Frame(tkRoot)
+        self.menu_frame.grid(row=0, column=0)
+
+        self.menu_canvas = tk.Canvas(self.menu_frame, bg='gray', width=600, height=550, highlightthickness=0)
         self.menu_canvas.grid(row=0, column=0)
 
         self.player_profile()
@@ -285,7 +289,11 @@ class PunchArenaMenu:
                 "No player loaded",
                 "Load a player or start a new\ngame to use the armory."
             )
-            return
+        if self.tk_armory is None:
+            self.tk_armory = PunchArenaArmory(self)
+        else:
+            self.menu_frame.grid_forget()
+            self.tk_armory.armory_frame.grid(row=0, column=0)
 
     def arena_fight(self):
         if self.active_profile is None:
@@ -304,6 +312,9 @@ class PunchArenaMenu:
             return
         if self.tk_shop is None:
             self.tk_shop = PunchArenaStore(self)
+        else:
+            self.menu_frame.grid_forget()
+            self.tk_shop.shop_frame.grid(row=0, column=0)
 
     def options(self):
         pass
