@@ -16,7 +16,6 @@ d_blue = [0, 0, 1, -1, 2, 0, 1, 1]
 d_green = [0, 0, 1, 1, 0, 2, -1, 1]
 d_yellow = [0, 0, -1, 1, -2, 0, -1, -1]
 
-
 class PunchArenaStore:
     def __init__(self, main_menu):
         tkRoot = self.tkRoot = main_menu.tkRoot
@@ -313,24 +312,25 @@ class PunchArenaStore:
         canvas = self.moves_canvas
 
         scroll = tk.Scrollbar(self.moves_frame)
-        self.moves_canvas.configure(yscrollcommand=scroll.set, state="disabled")
+        self.moves_canvas.configure(yscrollcommand=scroll.set)
         scroll.config(command=self.moves_canvas.yview)
         scroll.grid(row=0, column=1, sticky='ns')
 
         global images
         images['shopicon'] = tk.PhotoImage(file="imgs/menu/shopicon.png")
+        images['shopmoney'] = tk.PhotoImage(file="imgs/menu/shopmoney.png")
+        images['shopCC'] = tk.PhotoImage(file="imgs/menu/shopCC.png")
 
         movelist = getattr(moves, "MOVELIST")
         k = 0
-        self.move_buttons = []
+        self.move_buttons = dict()
         for move in movelist:
             if move == "none":
                 pass
             else:
-                self.move_buttons.append(ShopButton(self, k, move))
+                a = ShopButton(self, k, move)
+                self.move_buttons[move] = a
                 k += 1
-
-
 
     def show_menu(self):
         self.shop_frame.grid_forget()
@@ -340,6 +340,12 @@ class PunchArenaStore:
         self.shop_frame.grid_forget()
         self.main_menu.armory()
 
+    def set_info(self, move):
+        self.info.config(state="normal")
+        self.info.delete(1.0, tk.END)
+        self.info.insert(tk.END, move)
+        self.info.config(state="disabled")
+
 
 class ShopButton:
     def __init__(self, shop, count, move):
@@ -347,7 +353,20 @@ class ShopButton:
         self.x = count % 5
 
         self.move = move
+        self.shop = shop
 
         canvas = shop.moves_canvas
         global images
-        canvas.create_image(self.x * 83, self.y * 50, anchor='nw', image=images['shopicon'], tag=self.move)
+        canvas.create_image(self.x * 83, self.y * 50, anchor='nw', image=images['shopicon'],
+                            tags=[self.move, self.move + "_cover"])
+        canvas.create_image(self.x * 83, self.y * 50, anchor='nw', image=images['shopmoney'],
+                            tags=[self.move, self.move + "_PD"])
+        canvas.create_image(self.x * 83 + 16, self.y * 50, anchor='nw', image=images['shopCC'],
+                            tags=[self.move, self.move + "_CC"])
+        canvas.create_text(self.x * 83 + 16, self.y * 50 + 25, anchor='n', text="LVL",
+                           tags=[self.move, self.move + "_lvl"])
+        # bind all the move icons to the click method
+        canvas.tag_bind(self.move, "<Button-1>", self.click)
+
+    def click(self, event):
+        self.shop.set_info(self.move)
