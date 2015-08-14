@@ -45,5 +45,8 @@ class move_super:
 
 
 MOVELIST = [
-    "speed"
+    "speed",
+    "bulk",
+    "tactics",
+    "brawler"
 ]

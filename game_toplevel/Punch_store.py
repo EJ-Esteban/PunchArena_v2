@@ -8,7 +8,7 @@ images = dict()
 
 # storing these constants up here for convenience
 d_offset = [47, 300]
-d_segment = float(75 / 4)
+d_segment = 18
 d_center = 37
 
 d_red = [0, 0, 1, -1, 0, -2, -1, -1]
@@ -317,11 +317,19 @@ class PunchArenaStore:
         scroll.config(command=self.moves_canvas.yview)
         scroll.grid(row=0, column=1, sticky='ns')
 
-        canvas.create_text(20, 450, text="asdgf")
+        global images
+        images['shopicon'] = tk.PhotoImage(file="imgs/menu/shopicon.png")
 
-        thingy = getattr(moves, "speed")
-        self.info.config(state="normal")
-        self.info.insert(tk.END, str(thingy.cost_list))
+        movelist = getattr(moves, "MOVELIST")
+        k = 0
+        self.move_buttons = []
+        for move in movelist:
+            if move == "none":
+                pass
+            else:
+                self.move_buttons.append(ShopButton(self, k, move))
+                k += 1
+
 
 
     def show_menu(self):
@@ -331,3 +339,15 @@ class PunchArenaStore:
     def show_armory(self):
         self.shop_frame.grid_forget()
         self.main_menu.armory()
+
+
+class ShopButton:
+    def __init__(self, shop, count, move):
+        self.y = int(count / 5)
+        self.x = count % 5
+
+        self.move = move
+
+        canvas = shop.moves_canvas
+        global images
+        canvas.create_image(self.x * 83, self.y * 50, anchor='nw', image=images['shopicon'], tag=self.move)
