@@ -238,6 +238,7 @@ class PunchArenaMenu:
         self.update_profile()
         if self.tk_shop is not None:
             self.tk_shop.redraw_player()
+            self.tk_shop.repaint_moves()
 
     def save_game(self):
         if self.active_profile is None:

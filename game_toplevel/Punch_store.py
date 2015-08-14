@@ -5,6 +5,7 @@ import moves
 
 # need a top level reference to images to prevent garbage collection
 images = dict()
+shop_moves = dict()
 
 # storing these constants up here for convenience
 d_offset = [47, 300]
@@ -15,6 +16,7 @@ d_red = [0, 0, 1, -1, 0, -2, -1, -1]
 d_blue = [0, 0, 1, -1, 2, 0, 1, 1]
 d_green = [0, 0, 1, 1, 0, 2, -1, 1]
 d_yellow = [0, 0, -1, 1, -2, 0, -1, -1]
+
 
 class PunchArenaStore:
     def __init__(self, main_menu):
@@ -33,6 +35,9 @@ class PunchArenaStore:
         self.pop_profile()
         self.pop_moves()
         self.update_profile()
+        self.repaint_moves()
+
+        self.active_move = None
 
     def make_drawing_area(self):
         global images
@@ -92,6 +97,10 @@ class PunchArenaStore:
         button.bind("<Enter>", lambda event, h=button: h.configure(bg="light gray"))
         button.bind("<Leave>", lambda event, h=button: h.configure(bg="gray"))
 
+    def unbind_hover1(self, button):
+        button.unbind("<Enter>")
+        button.unbind("<Leave>")
+
     def pop_info(self):
         """populates info area"""
         tkRoot = self.tkRoot
@@ -114,20 +123,19 @@ class PunchArenaStore:
         self.bind_hover1(armory_btn)
         canvas.create_window(75, 99, width=75, anchor='nw', window=armory_btn, height=50)
 
-        buy_btn = tk.Button(tkRoot, btn_options)
-        buy_btn.configure(text="Buy   ", font="impact 22", anchor="e")
-        self.bind_hover1(buy_btn)
-        canvas.create_window(0, 50, width=150, anchor='nw', window=buy_btn, height=49)
+        self.buy_btn = tk.Button(tkRoot, btn_options)
+        self.buy_btn.configure(text="Upgrade  ", font="impact 22", anchor="e", state="disabled")
+        canvas.create_window(0, 50, width=150, anchor='nw', window=self.buy_btn, height=49)
 
         global images
         images['info_under'] = tk.PhotoImage(file="imgs/statbar/errorblock.gif")
         images['info_over'] = tk.PhotoImage(file="imgs/statbar/buttoncover.gif")
 
-        canvas.create_image(100, 0, image=images['info_under'], anchor='nw')
-        canvas.create_image(100, 0, image=images['info_over'], anchor='nw', tag='info_icon')
+        canvas.create_image(100, 0, image=images['info_under'], anchor='nw', tag='info_icon')
+        canvas.create_image(100, 0, image=images['info_over'], anchor='nw')
 
         self.info = tk.Text(self.shop_frame, bg="dim gray", font="helvetica 10", wrap="word", foreground="white",
-                            bd=2)
+                            bd=2, padx=3, pady=3)
         canvas.create_window(150, 0, width=265, height=149, anchor='nw', window=self.info)
 
         scroll = tk.Scrollbar(self.shop_frame)
@@ -135,6 +143,18 @@ class PunchArenaStore:
         scroll.config(command=self.info.yview)
         scroll.grid(row=0, column=1, sticky="NSEW")
         canvas.create_window(414, 0, width=17, height=149, anchor='nw', window=scroll)
+
+        self.info.tag_configure('title', font="helvetica 12 bold")
+        self.info.tag_configure('tiny', font="helvetica 8 italic")
+        self.info.tag_configure('red', foreground="red")
+        self.info.tag_configure('blue', foreground="blue")
+        self.info.tag_configure('green', foreground="lime green")
+        self.info.tag_configure('yellow', foreground="yellow")
+
+        self.info.tag_configure('tinyred', foreground="red", font="helvetica 8 italic")
+        self.info.tag_configure('tinyblue', foreground="blue", font="helvetica 8 italic")
+        self.info.tag_configure('tinygreen', foreground="lime green", font="helvetica 8 italic")
+        self.info.tag_configure('tinyyellow', foreground="yellow", font="helvetica 8 italic")
 
     def pop_profile(self):
         canvas = self.c_canvas[3]
@@ -332,6 +352,40 @@ class PunchArenaStore:
                 self.move_buttons[move] = a
                 k += 1
 
+    def repaint_moves(self):
+        profile = self.main_menu.active_profile
+        cc = profile.color_credits
+
+        movelist = getattr(moves, "MOVELIST")
+        for move in movelist:
+            obj = shop_moves[move]
+            lvl = 0
+            if move in profile.abilities.keys():
+                lvl = profile.abilities[move]
+            button = self.move_buttons[move]
+            if lvl > 10:
+                button.set_lvl_text(ShopButton.lvl[11])
+            else:
+                button.set_lvl_text(ShopButton.lvl[lvl])
+
+            if lvl >= obj.upgrade_max:
+                button.set_lvl_text("MAX")
+                # blot out ability to buy
+                button.show_CC()
+                button.show_money()
+            else:
+                cc_prereq = obj.cc_prereq(lvl + 1)
+
+                if cc_prereq[0] <= cc[0] and cc_prereq[1] <= cc[1] and cc_prereq[2] <= cc[2] and cc_prereq[3] <= cc[3]:
+                    button.hide_CC()
+                else:
+                    button.show_CC()
+                cost = obj.cost(lvl + 1)
+                if cost <= profile.punch_dollars:
+                    button.hide_money()
+                else:
+                    button.show_money()
+
     def show_menu(self):
         self.shop_frame.grid_forget()
         self.main_menu.menu_frame.grid(row=0, column=0)
@@ -341,13 +395,70 @@ class PunchArenaStore:
         self.main_menu.armory()
 
     def set_info(self, move):
+        self.active_move = move
+
+        profile = self.main_menu.active_profile
+        global images
+        self.info_canvas.itemconfig("info_icon", image=images[move])
+
+        lvl = 0
+        if move in profile.abilities.keys():
+            lvl = profile.abilities[move]
+
         self.info.config(state="normal")
+        obj = shop_moves[move]
         self.info.delete(1.0, tk.END)
-        self.info.insert(tk.END, move)
+        text = obj.description_long()
+        self.info.insert(tk.END, text[0], "title")
+
+        buy = True
+        upgrade = True
+
+        if lvl >= obj.upgrade_max:
+            self.info.insert(tk.END, "\nCannot upgrade any further.", "tiny")
+            buy = upgrade = False
+        else:
+            cost = obj.cost(lvl + 1)
+            if cost > 0:
+                if lvl == 0:
+                    self.info.insert(tk.END, "\ncost to buy:" + str(cost), "tiny")
+                    upgrade = False
+                else:
+                    self.info.insert(tk.END, "\ncost to upgrade:" + str(cost), "tiny")
+                    buy = False
+            cc_prereq = obj.cc_prereq(lvl + 1)
+            cc = profile.color_credits
+            if sum(cc_prereq) > 0:
+                self.info.insert(tk.END, "\ncc required: ", "tiny")
+                self.info.insert(tk.END, "%d  " % cc_prereq[0], "tinyred", "%d  " % cc_prereq[1], "tinyblue",
+                                 "%d  " % cc_prereq[2],
+                                 "tinygreen", "%d" % cc_prereq[3], "tinyyellow")
+            if cc_prereq[0] <= cc[0] and cc_prereq[1] <= cc[1] and cc_prereq[2] <= cc[2] and cc_prereq[3] <= cc[3]:
+                buy = buy & True
+                upgrade = upgrade & True
+            cc_gain = obj.cc_n(lvl + 1)
+            if sum(cc_gain) > 0:
+                self.info.insert(tk.END, "\ncc gained: ", "tiny")
+                self.info.insert(tk.END, "%d  " % cc_gain[0], "tinyred", "%d  " % cc_gain[1], "tinyblue",
+                                 "%d  " % cc_gain[2],
+                                 "tinygreen", "%d" % cc_gain[3], "tinyyellow")
+        self.info.insert(tk.END, '\n' + text[1])
         self.info.config(state="disabled")
+
+        if buy:
+            self.buy_btn.configure(text="Buy   ", state="normal")
+            self.bind_hover1(self.buy_btn)
+        elif upgrade:
+            self.buy_btn.configure(text="Upgrade  ", state="normal")
+            self.bind_hover1(self.buy_btn)
+        else:
+            self.buy_btn.configure(text="Upgrade  ", state="disabled")
+            self.unbind_hover1(self.buy_btn)
 
 
 class ShopButton:
+    lvl = ["--", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "X+"]
+
     def __init__(self, shop, count, move):
         self.y = int(count / 5)
         self.x = count % 5
@@ -355,8 +466,18 @@ class ShopButton:
         self.move = move
         self.shop = shop
 
+        global shop_moves
+        class_ = getattr(moves, move)
+        shop_moves[move] = class_()
+
         canvas = shop.moves_canvas
+        self.canvas = canvas
         global images
+
+        images[move] = tk.PhotoImage(file="imgs/statbar/%s" % shop_moves[move].spriteName)
+        canvas.create_image(self.x * 83 + 33, self.y * 50, anchor='nw', image=images[move],
+                            tags=[self.move, self.move + "_sprite"])
+
         canvas.create_image(self.x * 83, self.y * 50, anchor='nw', image=images['shopicon'],
                             tags=[self.move, self.move + "_cover"])
         canvas.create_image(self.x * 83, self.y * 50, anchor='nw', image=images['shopmoney'],
@@ -365,8 +486,24 @@ class ShopButton:
                             tags=[self.move, self.move + "_CC"])
         canvas.create_text(self.x * 83 + 16, self.y * 50 + 25, anchor='n', text="LVL",
                            tags=[self.move, self.move + "_lvl"])
+
         # bind all the move icons to the click method
         canvas.tag_bind(self.move, "<Button-1>", self.click)
+
+    def set_lvl_text(self, text):
+        self.canvas.itemconfig(self.move + "_lvl", text=text)
+
+    def show_money(self):
+        self.canvas.itemconfig(self.move + "_PD", state="normal")
+
+    def hide_money(self):
+        self.canvas.itemconfig(self.move + "_PD", state="hidden")
+
+    def show_CC(self):
+        self.canvas.itemconfig(self.move + "_CC", state="normal")
+
+    def hide_CC(self):
+        self.canvas.itemconfig(self.move + "_CC", state="hidden")
 
     def click(self, event):
         self.shop.set_info(self.move)
