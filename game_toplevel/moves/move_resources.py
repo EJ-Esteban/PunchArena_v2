@@ -62,12 +62,12 @@ class move_super:
 
 MOVELIST = [
     "walk",
+    "punch",
+    "block",
     "grab",
     "throw",
-    "block",
-    "punch",
     "speed",
-    "tactics",
+    "brawler",
     "bulk",
-    "brawler"
+    "tactics",
 ]

@@ -146,6 +146,8 @@ class PunchArenaStore:
 
         self.info.tag_configure('title', font="helvetica 12 bold")
         self.info.tag_configure('tiny', font="helvetica 8 italic")
+        self.info.tag_configure('small', font="helvetica 9 italic")
+
         self.info.tag_configure('red', foreground="red")
         self.info.tag_configure('blue', foreground="blue")
         self.info.tag_configure('green', foreground="lime green")
@@ -324,8 +326,12 @@ class PunchArenaStore:
     def pop_moves(self):
         frame = tk.Frame(self.moves_frame)
         frame.grid(row=0, column=0)
+        movelist = getattr(moves, "MOVELIST")
 
-        self.moves_canvas = tk.Canvas(frame, bg="purple", height=337, width=414, scrollregion=(0, 0, 414, 500),
+        moveheight = 50 * (int(len(movelist) / 5) + 1)
+        yheight = max(moveheight, 337)
+
+        self.moves_canvas = tk.Canvas(frame, bg="purple", height=337, width=414, scrollregion=(0, 0, 414, yheight),
                                       highlightthickness=0)
         self.moves_canvas.pack()
 
@@ -341,7 +347,6 @@ class PunchArenaStore:
         images['shopmoney'] = tk.PhotoImage(file="imgs/menu/shopmoney.png")
         images['shopCC'] = tk.PhotoImage(file="imgs/menu/shopCC.png")
 
-        movelist = getattr(moves, "MOVELIST")
         k = 0
         self.move_buttons = dict()
         for move in movelist:
@@ -413,6 +418,9 @@ class PunchArenaStore:
 
         buy = True
         upgrade = True
+
+        if len(text) > 2:
+            self.info.insert(tk.END, "\n%s" % text[2], "small")
 
         if lvl >= obj.upgrade_max:
             self.info.insert(tk.END, "\nCannot upgrade any further.", "tiny")

@@ -9,7 +9,8 @@ class walk(move_super):
 
     def description_long(self, ):
         return ["walk",
-                "Arrow keys: move yourself around the arena."]
+                "Arrow keys: move yourself around the arena."
+            , "Basic Move"]
 
 
 class grab(move_super):
@@ -21,7 +22,8 @@ class grab(move_super):
     def description_long(self):
         return ["grab",
                 "space: pick any objects on the floor up"
-                + "\narrow keys: grab opponent and wrestle with them"]
+                + "\narrow keys: grab opponent and wrestle with them"
+            , "Basic Move"]
 
 
 class throw(move_super):
@@ -33,7 +35,8 @@ class throw(move_super):
     def description_long(self):
         return ["throw",
                 "space: drop any held objects"
-                + "\narrow keys: attempt to throw a held oppponent"]
+                + "\narrow keys: attempt to throw a held oppponent"
+            , "Basic Move"]
 
 
 class block(move_super):
@@ -44,7 +47,8 @@ class block(move_super):
 
     def description_long(self):
         return ["block",
-                "hurt less in a direction"]
+                "hurt less in a direction"
+            , "Basic Move"]
 
 
 class punch(move_super):
@@ -55,4 +59,5 @@ class punch(move_super):
 
     def description_long(self):
         return ["punch",
-                "hit crap"]
+                "hit crap"
+            , "Basic Move"]
