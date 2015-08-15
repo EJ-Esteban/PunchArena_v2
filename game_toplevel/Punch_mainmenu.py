@@ -239,6 +239,7 @@ class PunchArenaMenu:
         if self.tk_shop is not None:
             self.tk_shop.redraw_player()
             self.tk_shop.repaint_moves()
+            self.tk_shop.set_info(self.tk_shop.active_move)
 
     def save_game(self):
         if self.active_profile is None:
@@ -287,7 +288,8 @@ class PunchArenaMenu:
 
         if self.tk_shop is not None:
             self.tk_shop.redraw_player()
-
+            self.tk_shop.repaint_moves()
+            self.tk_shop.set_info(self.tk_shop.active_move)
 
 
     def armory(self):
@@ -296,6 +298,7 @@ class PunchArenaMenu:
                 "No player loaded",
                 "Load a player or start a new\ngame to use the armory."
             )
+            return
         if self.tk_armory is None:
             self.tk_armory = PunchArenaArmory(self)
         else:

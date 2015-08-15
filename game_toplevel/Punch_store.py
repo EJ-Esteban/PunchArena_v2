@@ -1,6 +1,5 @@
 import tkinter as tk
 import math
-
 import moves
 
 # need a top level reference to images to prevent garbage collection
@@ -37,7 +36,7 @@ class PunchArenaStore:
         self.update_profile()
         self.repaint_moves()
 
-        self.active_move = None
+        self.active_move = "walk"
 
     def make_drawing_area(self):
         global images
@@ -98,8 +97,11 @@ class PunchArenaStore:
         button.bind("<Leave>", lambda event, h=button: h.configure(bg="gray"))
 
     def unbind_hover1(self, button):
+        button.configure(state="normal", bg="gray")
         button.unbind("<Enter>")
         button.unbind("<Leave>")
+        button.configure(state="disabled")
+
 
     def pop_info(self):
         """populates info area"""
@@ -123,7 +125,7 @@ class PunchArenaStore:
         self.bind_hover1(armory_btn)
         canvas.create_window(75, 99, width=75, anchor='nw', window=armory_btn, height=50)
 
-        self.buy_btn = tk.Button(tkRoot, btn_options)
+        self.buy_btn = tk.Button(tkRoot, btn_options, command=self.buy_move)
         self.buy_btn.configure(text="Upgrade  ", font="impact 22", anchor="e", state="disabled")
         canvas.create_window(0, 50, width=150, anchor='nw', window=self.buy_btn, height=49)
 
@@ -415,15 +417,16 @@ class PunchArenaStore:
         self.info.delete(1.0, tk.END)
         text = obj.description_long()
         self.info.insert(tk.END, text[0], "title")
+        if len(text) > 2:
+            self.info.insert(tk.END, "\n%s" % text[2], "small")
+
+        self.info.insert(tk.END, "\nCurrent Level: %d" % lvl, "tiny")
 
         buy = True
         upgrade = True
 
-        if len(text) > 2:
-            self.info.insert(tk.END, "\n%s" % text[2], "small")
-
         if lvl >= obj.upgrade_max:
-            self.info.insert(tk.END, "\nCannot upgrade any further.", "tiny")
+            self.info.insert(tk.END, " (Cannot upgrade any further.)", "tiny")
             buy = upgrade = False
         else:
             cost = obj.cost(lvl + 1)
@@ -434,6 +437,8 @@ class PunchArenaStore:
                 else:
                     self.info.insert(tk.END, "\ncost to upgrade:" + str(cost), "tiny")
                     buy = False
+                if cost > profile.punch_dollars:
+                    upgrade = buy = False
             cc_prereq = obj.cc_prereq(lvl + 1)
             cc = profile.color_credits
             if sum(cc_prereq) > 0:
@@ -444,6 +449,9 @@ class PunchArenaStore:
             if cc_prereq[0] <= cc[0] and cc_prereq[1] <= cc[1] and cc_prereq[2] <= cc[2] and cc_prereq[3] <= cc[3]:
                 buy = buy & True
                 upgrade = upgrade & True
+            else:
+                buy = buy & False
+                upgrade = upgrade & False
             cc_gain = obj.cc_n(lvl + 1)
             if sum(cc_gain) > 0:
                 self.info.insert(tk.END, "\ncc gained: ", "tiny")
@@ -462,6 +470,28 @@ class PunchArenaStore:
         else:
             self.buy_btn.configure(text="Upgrade  ", state="disabled")
             self.unbind_hover1(self.buy_btn)
+
+    def buy_move(self):
+        move = self.active_move
+        move_obj = shop_moves[move]
+        profile = self.main_menu.active_profile
+        lvl = 0
+        if move in profile.abilities.keys():
+            lvl = profile.abilities[move]
+        profile.abilities[move] = lvl + 1
+
+        cost = move_obj.cost(lvl + 1)
+        profile.punch_dollars -= cost
+
+        cc = move_obj.cc_n(lvl + 1)
+
+        profile.color_credits = [sum(x) for x in zip(profile.color_credits, cc)]
+
+        self.set_info(move)
+
+        self.repaint_moves()
+        self.redraw_player()
+
 
 
 class ShopButton:

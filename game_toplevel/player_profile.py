@@ -18,10 +18,10 @@ class Profile:
         self.name = s[:-1]
 
         # basic, unskilled stats
-        self.max_hp = 10
-        self.max_mp = 10
+        self.max_hp = 30
+        self.max_mp = 30
         self.max_move = 2
-        self.base_damage = 3
+        self.base_damage = 6
         self.blood_in = 6
         self.blood_out = 4  # 6 turns to gain bloodlust, 4 to bleed out
 

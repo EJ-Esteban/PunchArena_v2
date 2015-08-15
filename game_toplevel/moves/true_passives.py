@@ -6,8 +6,11 @@ class bulk(move_super):
     cost_list = [0, 10, 10, 10, 20, 30, 40, 60, 90, 130]
     spriteName = "bulkicon.png"
 
-    def description_long(self, ):
-        return ["bulk", "BE STRONG LIKE MOUNTAIN", "True Passive"]
+    def description_long(self):
+        return ["Bulk",
+                "BE STRONG LIKE MOUNTAIN."
+                "\n(+5 HP per level)",
+                "True Passive"]
 
     def cc_n(self, n):
         a = self.cost(n)
@@ -29,7 +32,10 @@ class tactics(move_super):
     spriteName = "tacticsicon.png"
 
     def description_long(self):
-        return ["tactics", "BE SMART LIKE SUN TZU", "True Passive"]
+        return ["tactics",
+                "BE SMART LIKE SUN TZU"
+                "\n(+5 MP per level)",
+                "True Passive"]
 
     def cc_n(self, n):
         a = self.cost(n)
@@ -50,7 +56,10 @@ class speed(move_super):
     spriteName = "speedicon.png"
 
     def description_long(self):
-        return ["speed", "GO FAST LIKE SANIC", "True Passive"]
+        return ["speed",
+                "GO FAST LIKE SANIC"
+                "\n(+1 move per level)",
+                "True Passive"]
 
     def cc_n(self, n):
         a = self.cost(n)
@@ -72,7 +81,10 @@ class brawler(move_super):
     spriteName = "brawlericon.png"
 
     def description_long(self):
-        return ["brawler", "GO HARD LIKE PINOCCHIO", "True Passive"]
+        return ["brawler",
+                "GO HARD LIKE PINOCCHIO"
+                "\n(+1 dmg per level)",
+                "True Passive"]
 
     def cc_n(self, n):
         a = self.cost(n)

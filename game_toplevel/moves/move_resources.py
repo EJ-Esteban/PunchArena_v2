@@ -23,7 +23,7 @@ class move_super:
         x = [0, 0, 0, 0]
         for k in range(1, n + 1):
             foo = self.cc_n(n)
-            x = map(add, x, foo)
+            x = [sum(k) for k in zip(x, foo)]
         return x
 
     def cost(self, n):
@@ -70,4 +70,6 @@ MOVELIST = [
     "brawler",
     "bulk",
     "tactics",
+    "feint",
+    "tornadokick"
 ]
