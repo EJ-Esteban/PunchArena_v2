@@ -1,13 +1,13 @@
 from moves.move_resources import move_super
 
 
-class bulk(move_super):
+class sturdy(move_super):
     upgrade_max = 1000
     cost_list = [0, 10, 10, 10, 20, 30, 40, 60, 90, 130]
-    spriteName = "bulkicon.png"
+    spriteName = "sturdyicon.png"
 
     def description_long(self):
-        return ["Bulk",
+        return ["Sturdy",
                 "BE STRONG LIKE MOUNTAIN."
                 "\n(+5 HP per level)",
                 "True Passive"]

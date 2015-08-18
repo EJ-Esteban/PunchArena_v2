@@ -4,7 +4,7 @@ from moves.move_resources import move_super
 class tithe(move_super):
     upgrade_max = 3000
     cost_list = [60]
-    spriteName = "errorBlock.gif"
+    spriteName = "titheicon.png"
 
     def description_long(self):
         return ["Tithe",

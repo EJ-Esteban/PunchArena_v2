@@ -31,7 +31,7 @@ class tornadokick(move_super):
     spriteName = "speedicon.png"
 
     def description_long(self):
-        return ["Tornado Kick",
+        return ["Echo Kick",
                 "The user stops running and uses their remaining leg actions (move) to kick their opponent multiple times. Melee range. Will not destroy breakable tiles."
                 "\nCosts 4 mana and all remaining move. Does 2x move expended as damage."
                 "Equippable Skill"]

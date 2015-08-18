@@ -5,6 +5,7 @@ class move_super:
     """move super class"""
     cost_list = [0]
     spriteName = "errorBlock.gif"
+    spriteToggleName = "errorBlock.gif"
     upgrade_max = 1
     ability_aliases = []  # useful for toggle moves, like grab/throw
 
@@ -40,6 +41,7 @@ class move_super:
     def passive_effects_pre(self):
         """passive effects applied before game"""
         pass
+
     def passive_effects_arena(self):
         """passive effects applied in the arena"""
         pass
@@ -68,7 +70,7 @@ MOVELIST = [
     "throw",
     "speed",
     "brawler",
-    "bulk",
+    "sturdy",
     "tactics",
     "tithe",
     "feint",
