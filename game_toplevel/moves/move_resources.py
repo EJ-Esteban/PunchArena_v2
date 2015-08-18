@@ -70,6 +70,7 @@ MOVELIST = [
     "brawler",
     "bulk",
     "tactics",
+    "tithe",
     "feint",
     "tornadokick"
 ]
