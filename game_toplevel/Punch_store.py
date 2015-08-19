@@ -131,7 +131,7 @@ class PunchArenaStore:
 
         global images
         images['info_under'] = tk.PhotoImage(file="imgs/statbar/errorblock.gif")
-        images['info_over'] = tk.PhotoImage(file="imgs/statbar/buttoncover.gif")
+        images['info_over'] = tk.PhotoImage(file="imgs/statbar/IconCover.png")
 
         canvas.create_image(100, 0, image=images['info_under'], anchor='nw', tag='info_icon')
         canvas.create_image(100, 0, image=images['info_over'], anchor='nw')

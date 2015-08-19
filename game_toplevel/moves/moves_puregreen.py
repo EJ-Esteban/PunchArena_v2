@@ -8,7 +8,7 @@ class feint(move_super):
 
     def description_long(self):
         return ["Feint",
-                "The player may pay mana to do extra moves in a turn."
+                "The player may pay mana  to do extra moves in a turn."
                 "\nFor a feint lvl N, player may make up to N extra moves for an increasing amount of mana",
                 "Equippable Passive"]
 
@@ -33,7 +33,7 @@ class tornadokick(move_super):
     def description_long(self):
         return ["Echo Kick",
                 "The user stops running and uses their remaining leg actions (move) to kick their opponent multiple times. Melee range. Will not destroy breakable tiles."
-                "\nCosts 4 mana and all remaining move. Does 2x move expended as damage."
+                "\nCosts 4 mana and all remaining move. Does 2x move expended as damage.",
                 "Equippable Skill"]
 
     def cc_prereq(self, n):
