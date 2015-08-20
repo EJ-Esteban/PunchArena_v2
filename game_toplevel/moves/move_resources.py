@@ -63,16 +63,9 @@ class move_super:
         return [0, 0, 0, 0]
 
 MOVELIST = [
-    "walk",
-    "punch",
-    "block",
-    "grab",
-    "throw",
-    "speed",
-    "brawler",
-    "sturdy",
-    "tactics",
-    "tithe",
-    "feint",
-    "tornadokick"
+    "walk", "punch", "block", "grab", "throw",
+    "speed", "brawler", "sturdy", "tactics", "tithe",
+    "feint", "ekick", "bknux", "bblow", "heal",
+    "slam", "meditate", "laser", "poison", "bounty",
+    "fflurry", "bigslam", "pdriver",
 ]

@@ -25,7 +25,7 @@ class feint(move_super):
         return [0, 0, a, 0]
 
 
-class tornadokick(move_super):
+class ekick(move_super):
     upgrade_max = 1
     cost_list = [0, 75]
     spriteName = "blankTile.png"
