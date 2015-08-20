@@ -2,7 +2,7 @@ from moves.move_resources import move_super
 
 
 class walk(move_super):
-    spriteName = "walkButton.gif"
+    spriteName = "walkicon.png"
 
     def cost(self, n):
         return 0
@@ -14,7 +14,7 @@ class walk(move_super):
 
 
 class grab(move_super):
-    spriteName = "grabButton.gif"
+    spriteName = "grabicon.png"
 
     def cost(self, n):
         return 0
@@ -27,7 +27,7 @@ class grab(move_super):
 
 
 class throw(move_super):
-    spriteName = "throwButton.gif"
+    spriteName = "throwicon.png"
 
     def cost(self, n):
         return 0
@@ -40,7 +40,7 @@ class throw(move_super):
 
 
 class block(move_super):
-    spriteName = "blockButton.gif"
+    spriteName = "blockicon.png"
 
     def cost(self, n):
         return 0
@@ -52,7 +52,7 @@ class block(move_super):
 
 
 class punch(move_super):
-    spriteName = "punchbutton.gif"
+    spriteName = "punchicon.png"
 
     def cost(self, n):
         return 0

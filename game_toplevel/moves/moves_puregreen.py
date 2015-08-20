@@ -4,7 +4,7 @@ from moves.move_resources import move_super
 class feint(move_super):
     upgrade_max = 6
     cost_list = [0, 50, 200, 450, 800, 1250, 1800]
-    spriteName = "speedicon.png"
+    spriteName = "blankTile.png"
 
     def description_long(self):
         return ["Feint",
@@ -28,7 +28,7 @@ class feint(move_super):
 class tornadokick(move_super):
     upgrade_max = 1
     cost_list = [0, 75]
-    spriteName = "speedicon.png"
+    spriteName = "blankTile.png"
 
     def description_long(self):
         return ["Echo Kick",
