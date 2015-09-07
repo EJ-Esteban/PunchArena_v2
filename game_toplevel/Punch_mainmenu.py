@@ -6,6 +6,8 @@ from Punch_armory import PunchArenaArmory
 from player_profile import Profile
 from graphics_common import MyDialog
 
+import moves
+
 # need a top level reference to images to prevent garbage collection
 images = dict()
 
@@ -121,18 +123,15 @@ class PunchArenaMenu:
         canvas.create_text(533, 256, rightcol, fill='goldenrod', tag='p_yellow')
 
         # moves equipped
-        canvas.create_text(447, 277, {'font': "helvetica 12", 'anchor': 'w', 'fill': 'black', 'text': "Equipped:"})
 
-        images['button cover'] = tk.PhotoImage(file="imgs/statbar/buttoncover.gif")
-        images['error'] = tk.PhotoImage(file="imgs/statbar/errorblock.gif")
-
-        for x in [0, 1, 2, 3]:
-            canvas.create_image(460, 287 + x * 53, anchor="nw", image=images['error'], tag="p_" + str(x * 2))
-            canvas.create_image(460, 287 + x * 53, anchor="nw", image=images['button cover'])
+        images['button cover'] = tk.PhotoImage(file="imgs/statbar/IconCover.png")
+        images['error'] = tk.PhotoImage(file="imgs/statbar/blanktile.png")
 
         for x in [0, 1, 2, 3]:
-            canvas.create_image(528, 287 + x * 53, anchor="nw", image=images['error'], tag="p_" + str(x * 2 + 1))
-            canvas.create_image(528, 287 + x * 53, anchor="nw", image=images['button cover'])
+            canvas.create_image(460, 274 + x * 55, anchor="nw", image=images['error'], tag="p_" + str(x * 2))
+            canvas.create_image(460, 274 + x * 55, anchor="nw", image=images['button cover'])
+            canvas.create_image(528, 274 + x * 55, anchor="nw", image=images['error'], tag="p_" + str(x * 2 + 1))
+            canvas.create_image(528, 274 + x * 55, anchor="nw", image=images['button cover'])
 
     def update_profile(self):
         profile = self.active_profile
@@ -182,7 +181,10 @@ class PunchArenaMenu:
             if move == 'none':
                 canvas.itemconfig("p_%d" % x, image=images['error'])
             else:
-                images['icon_%d' % x] = tk.PhotoImage(file="imgs/statbar/%sbutton.gif" % move)
+
+                class_ = getattr(moves, move)
+                temp = class_()
+                images['icon_%d' % x] = tk.PhotoImage(file="imgs/statbar/%s" % temp.spriteName)
                 canvas.itemconfig("p_%d" % x, image=images['icon_%d' % x])
 
     def pop_buttons_play(self):
@@ -304,6 +306,7 @@ class PunchArenaMenu:
         else:
             self.menu_frame.grid_forget()
             self.tk_armory.armory_frame.grid(row=0, column=0)
+            self.tk_armory.repaint_moves()
 
     def arena_fight(self):
         if self.active_profile is None:

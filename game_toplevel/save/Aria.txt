@@ -10,7 +10,7 @@ Aria
 0
 [40, 130, 230, 150]
 ['punch', 'walk', 'block', 'grab', 'none', 'none', 'none', 'none']
-{'throw': 1, 'block': 1, 'grab': 1, 'walk': 1, 'none': 0, 'punch': 1, 'bulk': 20}
+{'throw': 1, 'block': 1, 'grab': 1, 'walk': 1, 'none': 0, 'punch': 1, 'sturdy': 20}
 grumpy
 ['bob', 'grumpy']
 normal

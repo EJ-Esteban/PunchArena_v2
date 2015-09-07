@@ -27,7 +27,7 @@ class meditate(move_super):
 class laser(move_super):
     upgrade_max = 4
     cost_list = [0, 20, 40, 80, 160]
-    spriteName = "blankTile.png"
+    spriteName = "laserIcon.png"
 
     def description_long(self):
         return ["Laser eyes",

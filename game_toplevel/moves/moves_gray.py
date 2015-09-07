@@ -32,7 +32,7 @@ class bounty(move_super):
 
     def description_long(self):
         return ["Bounty",
-                "The player meditates on prizes to come. This increases their reward should they win a fight. Has a 2 turn cooldown. Bonus maxes after 5 uses. Bonus is dependant on the opponent beatn.",
+                "The player meditates on prizes to come. This increases their reward should they win a fight. Has a 2 turn cooldown. Bonus maxes after 5 uses. Bonus is dependant on the opponent beaten.",
                 "Equippable Skill"]
 
     def cc_n(self, n):

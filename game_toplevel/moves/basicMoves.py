@@ -47,7 +47,7 @@ class block(move_super):
 
     def description_long(self):
         return ["block",
-                "\nhurt less in a direction"
+                "hurt less in a direction"
             , "Basic Move"]
 
 
